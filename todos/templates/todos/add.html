@@ -1,0 +1,43 @@
+{% extends 'todos/layout.html' %}
+
+{% block title %}一覧画面{% endblock %}
+
+{% block h1 %}Todo追加{% endblock %}
+
+{% block content %}
+    <table>
+        <thead>
+            <tr>
+                <th>タイトル</th>
+                <th>内容</th>
+                <th>状況</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <form action="{% url 'add' %}" method="post">
+                {% csrf_token %}
+                <tr>
+                    <th>
+                        <input type="text" name="title" id="title">
+                    </th>
+                    <th>
+                        <input type="text" name="content" id="content">
+                    </th>
+                    <th>
+                        <input type="radio" name="status" id="status_true" value="true"><label for="status_true">完了</label><br>
+                        <input type="radio" name="status" id="status_false" value="false" checked><label for="status_false">未完了</label>
+
+                    </th>
+                    <th>
+                        <input type="submit" value="作成">
+                    </th>
+                </tr>
+
+            </form>
+
+        </tbody>
+    </table>
+    <a href="{% url 'index' %}">一覧</a>
+
+{% endblock %}

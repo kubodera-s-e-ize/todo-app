@@ -1,0 +1,47 @@
+{% extends 'todos/layout.html' %}
+
+{% block title %}一覧画面{% endblock %}
+
+{% block h1 %}Todoリスト{% endblock %}
+
+{% block content %}
+    {% if todos %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <th>更新日時</th>
+                    <th>更新者</th>
+                    <th>状況</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for todo in todos %}
+                    <tr>
+                        <th>
+                            {{todo.title}}
+                        </th>
+                        <th>{{todo.updated_at|date:"Y-m-j H:i:s"}}</th>
+                        <th>{{todo.user}}</th>
+                        <th>
+                            {% if todo.status %}
+                                完了
+                            {% else %}
+                                未完了
+                            {% endif %}
+
+                        </th>
+                        <th>
+                            <a href="{% url 'detail' todo.id %}">詳細</a>
+                        </th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+        <p>No todos are available.</p>
+    {% endif %}
+    <a href="{% url 'add' %}">追加</a>
+{% endblock %}

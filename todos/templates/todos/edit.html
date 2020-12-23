@@ -1,0 +1,64 @@
+{% extends 'todos/layout.html' %}
+
+{% block title %}詳細画面{% endblock %}
+
+{% block h1 %}詳細{% endblock %}
+
+{% block content %}
+    {% if todo %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>タイトル</th>
+                    <th>内容</th>
+                    <th>状況</th>
+                    <th>更新日時</th>
+                    <th>更新者</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <form action="{% url 'edit' todo.id %}" method="post">
+                    {% csrf_token %}
+                    <tr>
+                        <th>
+                            <input type="text" name="title" id="title" value="{{ todo.title }}">
+                        </th>
+                        <th>
+                            <input type="text" name="content" id="content" value="{{ todo.content }}">
+                        </th>
+                        <th>
+                            <input type="radio" name="status" id="status_true" value="true" 
+                                {% if todo.status %}
+                                checked
+                                {% endif %}
+                            ><label for="status_true">完了</label><br>
+                            <input type="radio" name="status" id="status_false" value="false"
+                                {% if not todo.status %}
+                                checked
+                                {% endif %}
+                            ><label for="status_false">未完了</label>
+    
+                        </th>
+                        <th>{{todo.updated_at|date:"Y-m-j H:i:s"}}</th>
+                        <th>{{todo.user}}</th>
+                        <th>
+                            <input type="submit" value="変更">
+                        </th>
+                    </tr>
+
+                </form>
+
+            </tbody>
+        </table>
+
+
+
+
+  
+    {% else %}
+        <p>No data</p>
+    {% endif %}
+    
+    <a href="{% url 'index' %}">一覧</a>
+{% endblock %}
