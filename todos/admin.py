@@ -1,28 +1,34 @@
 from django.contrib import admin
+from django.urls import path
+from django.shortcuts import render
 from django.views.generic import View
 
 from .models import Todo
 
 
 # Register your models here.
-admin.site.register(Todo)
 
 
 class TodoAdmin(admin.ModelAdmin):
-    def get_urls(self):
-        urls = super().get_urls()
+    list_display = ('title', 'content', 'user', 'status', 'updated_at')
 
-        add_urls = [
-            path('add_page/', self.admin_site.admin_view(TodoAdminView.as_view()),
-                 name="add_page"),
-        ]
+#     def get_urls(self):
+#         urls = super().get_urls()
 
-        return add_urls + urls
+#         add_urls = [
+#             path('add_page/', self.admin_site.admin_view(TodoAdminView.as_view()),
+#                  name="add_page"),
+#         ]
+
+#         return add_urls + urls
 
 
-class TodoAdminView(View):
+# class TodoAdminView(View):
 
-    template_name = 'admin/todos/todo/add_page.html'
+#     template_name = 'admin/todos/todo/add_page.html'
 
-    def get(self, request):
-        return render(request, self.template_name)
+#     def get(self, request):
+#         return render(request, self.template_name)
+
+
+admin.site.register(Todo, TodoAdmin)
