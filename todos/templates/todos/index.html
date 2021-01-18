@@ -5,6 +5,31 @@
 {% block h1 %}Todoリスト{% endblock %}
 
 {% block content %}
+    <form action="{% url 'index' %}" method="get">
+        <tr>
+            <th>
+                <input type="text" name="word" id="word" value="{{ word }}">
+            </th>
+            <th>
+                <input type="radio" name="status" id="status_true" value="true" 
+                    {% if status == True %}
+                        checked
+                    {% endif %}
+                ><label for="status_true">完了</label>
+                <input type="radio" name="status" id="status_false" value="false"
+                    {% if status == False %}
+                        checked
+                    {% endif %}
+                ><label for="status_false">未完了</label>
+            </th>
+            <th>
+                <input type="submit" value="検索">
+            </th>
+            <th>
+                <button><a class="link_button" href="{% url 'index' %}">クリア</a></button>
+            </th>
+        </tr>
+    </form>
     {% if todos %}
         <table class="table">
             <thead>
@@ -13,6 +38,7 @@
                     <th>更新日時</th>
                     <th>更新者</th>
                     <th>状況</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -34,6 +60,14 @@
                         </th>
                         <th>
                             <a href="{% url 'detail' todo.id %}">詳細</a>
+                        </th>
+                        <th>                            
+                            {% if user.is_superuser %}
+                                <form action="{% url 'delete' todo.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button>削除</button>
+                                </form>
+                            {% endif %}
                         </th>
                     </tr>
                 {% endfor %}

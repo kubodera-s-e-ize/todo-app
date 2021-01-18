@@ -1,9 +1,11 @@
 from .models import Todo
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.db.models import Q
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.views.decorators.http import require_http_methods
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 
 
@@ -12,9 +14,22 @@ from django.urls import reverse
 @login_required
 def index(request):
     if request.method == "GET":
-        todos = Todo.objects.all()
+        word = ''
+        status = None
+        todos = Todo.objects
+        if 'word' in request.GET:
+            word = request.GET['word']
+            todos = todos.filter(
+                Q(title__icontains=word) | Q(content__icontains=word))
+        else:
+            todos = todos.all()
+        if 'status' in request.GET:
+            status = True if request.GET['status'] == 'true' else False
+            todos = todos.filter(status=status)
         context = {
-            'todos': todos
+            'todos': todos,
+            'word': word,
+            'status': status
         }
         return render(request, 'todos/index.html', context)
 
@@ -55,3 +70,14 @@ def edit(request, id):
         todo.user = request.user
         todo.save()
         return HttpResponseRedirect(reverse('detail', args=(id,)))
+
+
+@login_required
+@require_http_methods(['POST'])
+def delete(request, id):
+    user = request.user
+    if not user.is_superuser:
+        return HttpResponse(status=403)
+    todo = Todo.objects.get(id=id).delete()
+    print(todo)
+    return HttpResponseRedirect(reverse('index'))

@@ -1,0 +1,15 @@
+h1 > a, .link_button{
+    text-decoration: none;
+    color: black;
+}
+main{
+    margin: 1rem 10%
+}
+.user_info{
+    display: flex;
+    margin: 1rem;
+    background-color: aliceblue;
+}
+.user_info > p{
+    margin: 0 1rem;
+}
