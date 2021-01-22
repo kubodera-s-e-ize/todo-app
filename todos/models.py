@@ -15,7 +15,3 @@ class Todo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.BooleanField()
     updated_at = models.DateTimeField(auto_now=True)
-
-    # def updated_at(self):
-    #     # return dateformat.format(self.updated_at, 'Y/n/d H:i:s')
-    #     return type(self.updated_at | date)

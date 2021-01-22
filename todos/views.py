@@ -8,8 +8,8 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 
-
 # Create your views here.
+
 
 @login_required
 def index(request):
